@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sebuah Pesan Untukmu 💌</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS: DESIGN MODERN & ROMANTIS --- */
+        :root {
+            --primary: #ff4757;
+            --accent: #2ed573;
+            --bg-gradient: linear-gradient(135deg, #ffeaa7 0%, #ff7675 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background: var(--bg-gradient);
+            font-family: 'Poppins', sans-serif;
+            height: 100vh; height: 100dvh;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden; flex-direction: column; text-align: center;
+        }
+
+        .container {
+            width: 90%; max-width: 400px;
+            position: relative; z-index: 10;
+            perspective: 1000px;
+        }
+
+        /* CARD STYLE */
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            border: 2px solid #fff;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            display: none; /* Hidden by default */
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .card.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* TYPOGRAPHY */
+        h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 15px; font-weight: 800; }
+        
+        .romantic-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem; color: var(--primary);
+            margin: 20px 0; line-height: 1.4;
+        }
+
+        p { color: #555; font-size: 1rem; line-height: 1.6; margin-bottom: 20px; }
+
+        /* INPUT & BUTTONS */
+        input {
+            width: 100%; padding: 15px; border-radius: 30px; border: 2px solid #ddd;
+            text-align: center; font-size: 1.1rem; outline: none; background: #fff;
+            margin-bottom: 20px; transition: 0.3s;
+        }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(255, 71, 87, 0.2); }
+
+        button {
+            padding: 12px 35px; border-radius: 50px; font-weight: 700; font-size: 1rem;
+            border: none; cursor: pointer; transition: transform 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:active { transform: scale(0.95); }
+        .btn-wa { background: #25D366; color: white; animation: pulse 2s infinite; }
+
+        /* TOMBOL YES/NO */
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-yes { background: var(--primary); color: white; flex: 1; }
+        .btn-no { background: #fff; color: var(--primary); border: 2px solid var(--primary); flex: 1; position: relative; }
+
+        /* LOADER */
+        .loader-bar { width: 100%; height: 8px; background: #eee; border-radius: 5px; overflow: hidden; margin: 20px 0; }
+        .loader-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.1s; }
+
+        /* ANIMATIONS */
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        
+        /* BACKGROUND ELEMENTS */
+        .bg-floating { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .heart-bg { position: absolute; font-size: 20px; opacity: 0.5; animation: floatUp 10s linear infinite; }
+        @keyframes floatUp { to { transform: translateY(-120vh) rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" loop>
+        <source src="https://feeldreams.github.io/audio/nightchanges.mp3" type="audio/mp3">
+    </audio>
+
+    <div class="bg-floating" id="bg-container"></div>
+
+    <div class="container">
+
+        <div id="page-1" class="card active">
+            <div style="font-size: 60px;">💌</div>
+            <h1>Halo Kamu!</h1>
+            <p>Sebelum masuk ke dalam, aku butuh tau nama panggilan kamu dulu ya.</p>
+            <input type="text" id="name-input" placeholder="Tulis namamu..." autocomplete="off">
+            <button class="btn-primary" onclick="goToPage2()">Lanjut ❤️</button>
+        </div>
+
+        <div id="page-2" class="card">
+            <h1>Mencocokkan Hati...</h1>
+            <div style="font-size: 50px;">🔍</div>
+            <div class="loader-bar"><div class="loader-fill" id="scan-bar"></div></div>
+            <p id="scan-text">Sedang mencari sinyal cinta...</p>
+        </div>
+
+        <div id="page-3" class="card">
+            <div style="font-size: 50px;">✨</div>
+            <p>Tau gak sih, <b class="user-name"></b>?</p>
+            <div class="romantic-text">"Ada banyak orang di dunia ini, tapi entah kenapa cuma kamu yang nyangkut di pikiran aku."</div>
+            <button class="btn-primary" onclick="nextPage(3, 4)">Masa sih? 👉</button>
+        </div>
+
+        <div id="page-4" class="card">
+            <div style="font-size: 50px;">🌹</div>
+            <p>Aku gak butuh algoritma buat tau hasilnya...</p>
+            <div class="romantic-text">"Karena setiap liat notif dari kamu aja, jantungku udah 100% yakin."</div>
+            <button class="btn-primary" onclick="nextPage(4, 5)">Lanjut 👉</button>
+        </div>
+
+        <div id="page-5" class="card">
+            <div style="font-size: 60px;" id="emoji-reaction">🫣</div>
+            <h1>Hai, <span class="user-name"></span>!</h1>
+            <p>Jadi, di momen yang spesial ini, aku mau tanya sesuatu yang serius...</p>
+            <p style="font-weight: bold; font-size: 1.1rem;">Mau gak jadi pacar aku?</p>
+            
+            <div class="btn-group">
+                <button class="btn-yes" id="btn-yes" onclick="finish()">MAU DONG! 😍</button>
+                <button class="btn-no" id="btn-no" onmouseover="dodge()" onclick="dodge()">Gak</button>
+            </div>
+        </div>
+
+        <div id="page-6" class="card">
+            <div style="font-size: 70px;">🥰🎉</div>
+            <h1>Yeay! Jadian!</h1>
+            <p>Makasih ya <b class="user-name"></b> udah nerima aku. Aku janji bakal bikin kamu bahagia! ❤️</p>
+            
+            <button class="btn-wa" onclick="sendToWA()">
+                💌 Kirim Jawaban ke WA
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        /* --- KONFIGURASI --- */
+        const WA_NUMBER = "6281460365472"; // NOMOR TUJUAN
+        const WA_MESSAGE = "aku menerima kamu"; // PESAN OTOMATIS
+        
+        let userName = "";
+        const music = document.getElementById('bg-music');
+
+        /* --- NAVIGASI HALAMAN --- */
+        function nextPage(current, next) {
+            document.getElementById(`page-${current}`).classList.remove('active');
+            setTimeout(() => {
+                document.getElementById(`page-${next}`).classList.add('active');
+            }, 300);
+        }
+
+        /* --- HALAMAN 1 KE 2 (MULAI MUSIK & NAMA) --- */
+        function goToPage2() {
+            const input = document.getElementById('name-input');
+            userName = input.value.trim();
+            if (!userName) { alert("Isi namanya dulu manis 🥺"); return; }
+            
+            // Set nama di semua tempat
+            document.querySelectorAll('.user-name').forEach(el => el.innerText = userName);
+
+            // Play Musik Fade In
+            music.volume = 0;
+            music.play().then(() => {
+                let vol = 0;
+                let fade = setInterval(() => {
+                    if (vol < 0.4) { vol += 0.05; music.volume = vol; }
+                    else clearInterval(fade);
+                }, 200);
+            }).catch(e => console.log("Tap needed"));
+
+            nextPage(1, 2);
+            startFakeScan();
+        }
+
+        /* --- LOGIC SCANNING --- */
+        function startFakeScan() {
+            let width = 0;
+            const bar = document.getElementById('scan-bar');
+            const txt = document.getElementById('scan-text');
+            
+            let timer = setInterval(() => {
+                width++;
+                bar.style.width = width + "%";
+                
+                if (width === 30) txt.innerText = "Mengukur kadar kecocokan...";
+                if (width === 60) txt.innerText = "Mendeteksi senyuman manis...";
+                if (width === 90) txt.innerText = "Hasil ditemukan! 100% Jodoh!";
+                
+                if (width >= 100) {
+                    clearInterval(timer);
+                    setTimeout(() => nextPage(2, 3), 1000);
+                }
+            }, 40);
+        }
+
+        /* --- LOGIC TOMBOL LARI --- */
+        const btnNo = document.getElementById('btn-no');
+        const btnYes = document.getElementById('btn-yes');
+        const reaction = document.getElementById('emoji-reaction');
+        let dodgeCount = 0;
+
+        function dodge() {
+            dodgeCount++;
+            
+            // Posisi Acak
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 100);
+            
+            btnNo.style.position = 'fixed';
+            btnNo.style.left = x + 'px';
+            btnNo.style.top = y + 'px';
+
+            reaction.innerText = "😭";
+
+            if (dodgeCount >= 5) {
+                btnNo.style.display = 'none'; // Tombol hilang
+            }
+
+            // Tombol YES Membesar
+            let scale = 1 + (dodgeCount * 0.1);
+            btnYes.style.transform = `scale(${scale})`;
+        }
+
+        /* --- FINISH --- */
+        function finish() {
+            nextPage(5, 6);
+            createConfetti();
+        }
+
+        /* --- KIRIM WA --- */
+        function sendToWA() {
+            const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
+            window.open(url, '_blank');
+        }
+
+        /* --- BACKGROUND ANIMATION --- */
+        function createBg() {
+            const container = document.getElementById('bg-container');
+            const icons = ['❤️', '💕', '🌸', '✨'];
+            for (let i = 0; i < 20; i++) {
+                let el = document.createElement('div');
+                el.classList.add('heart-bg');
+                el.innerText = icons[Math.floor(Math.random() * icons.length)];
+                el.style.left = Math.random() * 100 + '%';
+                el.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                el.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                container.appendChild(el);
+            }
+        }
+
+        function createConfetti() {
+            setInterval(() => {
+                let d = document.createElement('div');
+                d.innerText = '🎉';
+                d.style.position = 'fixed'; d.style.left = Math.random() * 100 + 'vw'; d.style.top = '-50px'; d.style.zIndex = '999';
+                document.body.appendChild(d);
+                let speed = Math.random() * 5 + 2;
+                let top = -50;
+                let timer = setInterval(() => {
+                    top += speed; d.style.top = top + 'px';
+                    if (top > window.innerHeight) { clearInterval(timer); d.remove(); }
+                }, 20);
+            }, 50);
+        }
+
+        createBg();
+    </script>
+</body>
+</html>
