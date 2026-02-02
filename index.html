@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CSS: DESIGN & ANIMASI --- */
+        /* --- CSS: TAMPILAN CANTIK --- */
         :root {
             --primary: #ff4757;
             --bg-gradient: linear-gradient(135deg, #ffeaa7 0%, #ff7675 100%);
@@ -29,7 +29,7 @@
             perspective: 1000px;
         }
 
-        /* --- KARTU DENGAN ANIMASI MUNCUL --- */
+        /* ANIMASI KARTU */
         .card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -37,42 +37,42 @@
             padding: 30px 20px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             border: 1px solid #fff;
-            
-            /* Default Hidden */
-            display: none; 
-            opacity: 0; 
+            display: none; opacity: 0; 
         }
 
-        /* Kelas Active memicu animasi */
         .card.active {
             display: block;
             animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
         }
 
-        /* Definisi Animasi Pop In */
         @keyframes popIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.8) translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        /* TEKS */
+        /* TEXT STYLING */
         h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 15px; font-weight: 800; }
         .romantic-text { font-family: 'Dancing Script', cursive; font-size: 1.8rem; color: var(--primary); margin: 20px 0; }
         p { color: #555; font-size: 1rem; line-height: 1.6; margin-bottom: 20px; }
 
-        /* INPUT & TOMBOL */
+        /* INPUT NAMA */
         input {
             width: 100%; padding: 15px; border-radius: 30px; border: 2px solid #ddd;
             text-align: center; font-size: 1.1rem; outline: none; margin-bottom: 20px;
         }
         input:focus { border-color: var(--primary); }
 
+        /* INPUT PESAN (TEXTAREA) BARU */
+        textarea {
+            width: 100%; height: 80px; padding: 15px;
+            border-radius: 15px; border: 2px solid #ddd;
+            font-family: 'Poppins', sans-serif; font-size: 0.9rem;
+            resize: none; outline: none; margin-bottom: 15px;
+            background: #fff; color: #333;
+        }
+        textarea:focus { border-color: var(--primary); }
+
+        /* TOMBOL */
         button {
             padding: 12px 35px; border-radius: 50px; font-weight: 700; font-size: 1rem;
             border: none; cursor: pointer; width: 100%; transition: 0.2s;
@@ -81,7 +81,6 @@
         .btn-primary { background: var(--primary); color: white; }
         .btn-wa { background: #25D366; color: white; animation: pulse 2s infinite; }
         
-        /* Tombol Pilihan */
         .btn-group { display: flex; gap: 10px; margin-top: 20px; position: relative; height: 50px;}
         .btn-yes { background: var(--primary); color: white; width: 50%; z-index: 2;}
         .btn-no { background: #fff; color: var(--primary); border: 2px solid var(--primary); width: 50%; position: absolute; right: 0; }
@@ -148,12 +147,14 @@
         </div>
 
         <div id="page-6" class="card">
-            <div style="font-size: 70px;">🥰🎉</div>
+            <div style="font-size: 60px;">🥰🎉</div>
             <h1>Yeay! Jadian!</h1>
-            <p>Makasih ya <b class="user-name"></b> udah nerima aku. <br>Klik tombol ini buat kabari aku! ❤️</p>
+            <p>Makasih ya <b class="user-name"></b>. <br>Tulis pesan buat aku di bawah ini:</p>
+            
+            <textarea id="wa-message" placeholder="Tulis pesan kamu di sini...">Iya, aku mau jadi pacar kamu ❤️</textarea>
             
             <button class="btn-wa" onclick="sendToWA()">
-                💌 Kirim Jawaban ke WA
+                💌 Kirim ke WhatsApp
             </button>
         </div>
 
@@ -161,36 +162,27 @@
 
     <script>
         /* --- CONFIG --- */
-        const WA_NUMBER = "6281460365472";
-        const WA_MESSAGE = "aku menerima kamu";
+        const WA_NUMBER = "6281460365472"; // Nomor Kamu
         
         let userName = "";
         const music = document.getElementById('bg-music');
         let isMusicStarted = false;
 
-        /* --- LOGIC AUTO PAUSE MUSIK --- */
+        /* AUTO PAUSE */
         document.addEventListener("visibilitychange", function() {
-            if (document.hidden) {
-                music.pause(); // Pause kalau keluar tab/minimize
-            } else {
-                if (isMusicStarted) {
-                    music.play(); // Play lagi kalau balik
-                }
-            }
+            if (document.hidden) { music.pause(); } 
+            else { if (isMusicStarted) music.play(); }
         });
 
-        /* --- NAVIGASI HALAMAN DENGAN ANIMASI --- */
+        /* NAVIGASI */
         function nextPage(current, next) {
-            // Hilangkan halaman lama
             document.getElementById(`page-${current}`).classList.remove('active');
-            
-            // Tunggu sebentar (biar transisi smooth), lalu munculkan halaman baru
             setTimeout(() => {
                 document.getElementById(`page-${next}`).classList.add('active');
-            }, 100); // Waktu jeda sedikit biar animasi 'Pop In' kerasa ulang
+            }, 100);
         }
 
-        /* --- HALAMAN 1 KE 2 --- */
+        /* HALAMAN 1 KE 2 */
         function goToPage2() {
             const input = document.getElementById('name-input');
             userName = input.value.trim();
@@ -198,7 +190,6 @@
             
             document.querySelectorAll('.user-name').forEach(el => el.innerText = userName);
 
-            // Mulai Musik
             music.volume = 0;
             music.play().then(() => {
                 isMusicStarted = true;
@@ -213,7 +204,7 @@
             startFakeScan();
         }
 
-        /* --- FAKE SCANNER --- */
+        /* SCANNER */
         function startFakeScan() {
             let width = 0;
             const bar = document.getElementById('scan-bar');
@@ -228,7 +219,7 @@
             }, 40);
         }
 
-        /* --- TOMBOL LARI --- */
+        /* TOMBOL LARI */
         const btnNo = document.getElementById('btn-no');
         const btnYes = document.getElementById('btn-yes');
         const reaction = document.getElementById('emoji-reaction');
@@ -236,26 +227,32 @@
         function dodge() {
             const x = Math.random() * (window.innerWidth - 100);
             const y = Math.random() * (window.innerHeight - 100);
-            
             btnNo.style.position = 'fixed';
             btnNo.style.left = x + 'px';
             btnNo.style.top = y + 'px';
-            
             reaction.innerText = "😭";
         }
 
-        /* --- FINISH --- */
         function finish() {
             nextPage(5, 6);
             createConfetti();
         }
 
+        /* KIRIM WA (CUSTOM MESSAGE) */
         function sendToWA() {
-            const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
+            // Ambil pesan dari kotak input
+            let message = document.getElementById('wa-message').value;
+            
+            // Kalau kosong, isi default
+            if(message.trim() === "") {
+                message = "Aku terima kamu ❤️";
+            }
+
+            const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
         }
 
-        /* --- BACKGROUND DECORATION --- */
+        /* BACKGROUND */
         function createBg() {
             const container = document.getElementById('bg-container');
             const icons = ['❤️', '💕', '🌸', '✨'];
