@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sebuah Pesan Untukmu 💌</title>
+    <title>Untuk Kamu ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CSS: DESIGN MODERN & ROMANTIS --- */
+        /* --- CSS: DESIGN & ANIMASI --- */
         :root {
             --primary: #ff4757;
-            --accent: #2ed573;
             --bg-gradient: linear-gradient(135deg, #ffeaa7 0%, #ff7675 100%);
         }
 
@@ -30,72 +29,71 @@
             perspective: 1000px;
         }
 
-        /* CARD STYLE */
+        /* --- KARTU DENGAN ANIMASI MUNCUL --- */
         .card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 30px 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-            border: 2px solid #fff;
-            transition: transform 0.5s ease, opacity 0.5s ease;
-            display: none; /* Hidden by default */
-            opacity: 0;
-            transform: translateY(20px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 1px solid #fff;
+            
+            /* Default Hidden */
+            display: none; 
+            opacity: 0; 
         }
 
+        /* Kelas Active memicu animasi */
         .card.active {
             display: block;
-            opacity: 1;
-            transform: translateY(0);
+            animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
         }
 
-        /* TYPOGRAPHY */
+        /* Definisi Animasi Pop In */
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* TEKS */
         h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 15px; font-weight: 800; }
-        
-        .romantic-text {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.8rem; color: var(--primary);
-            margin: 20px 0; line-height: 1.4;
-        }
-
+        .romantic-text { font-family: 'Dancing Script', cursive; font-size: 1.8rem; color: var(--primary); margin: 20px 0; }
         p { color: #555; font-size: 1rem; line-height: 1.6; margin-bottom: 20px; }
 
-        /* INPUT & BUTTONS */
+        /* INPUT & TOMBOL */
         input {
             width: 100%; padding: 15px; border-radius: 30px; border: 2px solid #ddd;
-            text-align: center; font-size: 1.1rem; outline: none; background: #fff;
-            margin-bottom: 20px; transition: 0.3s;
+            text-align: center; font-size: 1.1rem; outline: none; margin-bottom: 20px;
         }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(255, 71, 87, 0.2); }
+        input:focus { border-color: var(--primary); }
 
         button {
             padding: 12px 35px; border-radius: 50px; font-weight: 700; font-size: 1rem;
-            border: none; cursor: pointer; transition: transform 0.2s;
+            border: none; cursor: pointer; width: 100%; transition: 0.2s;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            width: 100%;
         }
         .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:active { transform: scale(0.95); }
         .btn-wa { background: #25D366; color: white; animation: pulse 2s infinite; }
+        
+        /* Tombol Pilihan */
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; position: relative; height: 50px;}
+        .btn-yes { background: var(--primary); color: white; width: 50%; z-index: 2;}
+        .btn-no { background: #fff; color: var(--primary); border: 2px solid var(--primary); width: 50%; position: absolute; right: 0; }
 
-        /* TOMBOL YES/NO */
-        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
-        .btn-yes { background: var(--primary); color: white; flex: 1; }
-        .btn-no { background: #fff; color: var(--primary); border: 2px solid var(--primary); flex: 1; position: relative; }
-
-        /* LOADER */
         .loader-bar { width: 100%; height: 8px; background: #eee; border-radius: 5px; overflow: hidden; margin: 20px 0; }
         .loader-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.1s; }
 
-        /* ANIMATIONS */
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
         
-        /* BACKGROUND ELEMENTS */
         .bg-floating { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
         .heart-bg { position: absolute; font-size: 20px; opacity: 0.5; animation: floatUp 10s linear infinite; }
         @keyframes floatUp { to { transform: translateY(-120vh) rotate(360deg); } }
-
     </style>
 </head>
 <body>
@@ -111,7 +109,7 @@
         <div id="page-1" class="card active">
             <div style="font-size: 60px;">💌</div>
             <h1>Halo Kamu!</h1>
-            <p>Sebelum masuk ke dalam, aku butuh tau nama panggilan kamu dulu ya.</p>
+            <p>Kenalan dulu ya, siapa nama panggilan kamu?</p>
             <input type="text" id="name-input" placeholder="Tulis namamu..." autocomplete="off">
             <button class="btn-primary" onclick="goToPage2()">Lanjut ❤️</button>
         </div>
@@ -152,7 +150,7 @@
         <div id="page-6" class="card">
             <div style="font-size: 70px;">🥰🎉</div>
             <h1>Yeay! Jadian!</h1>
-            <p>Makasih ya <b class="user-name"></b> udah nerima aku. Aku janji bakal bikin kamu bahagia! ❤️</p>
+            <p>Makasih ya <b class="user-name"></b> udah nerima aku. <br>Klik tombol ini buat kabari aku! ❤️</p>
             
             <button class="btn-wa" onclick="sendToWA()">
                 💌 Kirim Jawaban ke WA
@@ -162,33 +160,48 @@
     </div>
 
     <script>
-        /* --- KONFIGURASI --- */
-        const WA_NUMBER = "6281460365472"; // NOMOR TUJUAN
-        const WA_MESSAGE = "aku menerima kamu"; // PESAN OTOMATIS
+        /* --- CONFIG --- */
+        const WA_NUMBER = "6281460365472";
+        const WA_MESSAGE = "aku menerima kamu";
         
         let userName = "";
         const music = document.getElementById('bg-music');
+        let isMusicStarted = false;
 
-        /* --- NAVIGASI HALAMAN --- */
+        /* --- LOGIC AUTO PAUSE MUSIK --- */
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                music.pause(); // Pause kalau keluar tab/minimize
+            } else {
+                if (isMusicStarted) {
+                    music.play(); // Play lagi kalau balik
+                }
+            }
+        });
+
+        /* --- NAVIGASI HALAMAN DENGAN ANIMASI --- */
         function nextPage(current, next) {
+            // Hilangkan halaman lama
             document.getElementById(`page-${current}`).classList.remove('active');
+            
+            // Tunggu sebentar (biar transisi smooth), lalu munculkan halaman baru
             setTimeout(() => {
                 document.getElementById(`page-${next}`).classList.add('active');
-            }, 300);
+            }, 100); // Waktu jeda sedikit biar animasi 'Pop In' kerasa ulang
         }
 
-        /* --- HALAMAN 1 KE 2 (MULAI MUSIK & NAMA) --- */
+        /* --- HALAMAN 1 KE 2 --- */
         function goToPage2() {
             const input = document.getElementById('name-input');
             userName = input.value.trim();
             if (!userName) { alert("Isi namanya dulu manis 🥺"); return; }
             
-            // Set nama di semua tempat
             document.querySelectorAll('.user-name').forEach(el => el.innerText = userName);
 
-            // Play Musik Fade In
+            // Mulai Musik
             music.volume = 0;
             music.play().then(() => {
+                isMusicStarted = true;
                 let vol = 0;
                 let fade = setInterval(() => {
                     if (vol < 0.4) { vol += 0.05; music.volume = vol; }
@@ -200,53 +213,35 @@
             startFakeScan();
         }
 
-        /* --- LOGIC SCANNING --- */
+        /* --- FAKE SCANNER --- */
         function startFakeScan() {
             let width = 0;
             const bar = document.getElementById('scan-bar');
             const txt = document.getElementById('scan-text');
-            
             let timer = setInterval(() => {
                 width++;
                 bar.style.width = width + "%";
-                
                 if (width === 30) txt.innerText = "Mengukur kadar kecocokan...";
                 if (width === 60) txt.innerText = "Mendeteksi senyuman manis...";
                 if (width === 90) txt.innerText = "Hasil ditemukan! 100% Jodoh!";
-                
-                if (width >= 100) {
-                    clearInterval(timer);
-                    setTimeout(() => nextPage(2, 3), 1000);
-                }
+                if (width >= 100) { clearInterval(timer); setTimeout(() => nextPage(2, 3), 1000); }
             }, 40);
         }
 
-        /* --- LOGIC TOMBOL LARI --- */
+        /* --- TOMBOL LARI --- */
         const btnNo = document.getElementById('btn-no');
         const btnYes = document.getElementById('btn-yes');
         const reaction = document.getElementById('emoji-reaction');
-        let dodgeCount = 0;
-
+        
         function dodge() {
-            dodgeCount++;
-            
-            // Posisi Acak
             const x = Math.random() * (window.innerWidth - 100);
             const y = Math.random() * (window.innerHeight - 100);
             
             btnNo.style.position = 'fixed';
             btnNo.style.left = x + 'px';
             btnNo.style.top = y + 'px';
-
+            
             reaction.innerText = "😭";
-
-            if (dodgeCount >= 5) {
-                btnNo.style.display = 'none'; // Tombol hilang
-            }
-
-            // Tombol YES Membesar
-            let scale = 1 + (dodgeCount * 0.1);
-            btnYes.style.transform = `scale(${scale})`;
         }
 
         /* --- FINISH --- */
@@ -255,13 +250,12 @@
             createConfetti();
         }
 
-        /* --- KIRIM WA --- */
         function sendToWA() {
             const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
             window.open(url, '_blank');
         }
 
-        /* --- BACKGROUND ANIMATION --- */
+        /* --- BACKGROUND DECORATION --- */
         function createBg() {
             const container = document.getElementById('bg-container');
             const icons = ['❤️', '💕', '🌸', '✨'];
@@ -271,11 +265,10 @@
                 el.innerText = icons[Math.floor(Math.random() * icons.length)];
                 el.style.left = Math.random() * 100 + '%';
                 el.style.animationDuration = (Math.random() * 5 + 5) + 's';
-                el.style.fontSize = (Math.random() * 20 + 20) + 'px';
                 container.appendChild(el);
             }
         }
-
+        
         function createConfetti() {
             setInterval(() => {
                 let d = document.createElement('div');
